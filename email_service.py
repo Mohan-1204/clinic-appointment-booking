@@ -46,5 +46,6 @@ Treatment: {treatment}
         return True
 
     except Exception as e:
-        print("EMAIL ERROR:", str(e))
+        print(f"EMAIL ERROR:{e}")
+        print(e)
         return False
