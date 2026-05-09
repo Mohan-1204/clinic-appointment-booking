@@ -1,5 +1,6 @@
 import os
 import smtplib
+import streamlit as st
 from email.mime.text import MIMEText
 
 def send_email(receiver_email, name, age, selected_doctor, doctor_time, treatment):
@@ -7,8 +8,8 @@ def send_email(receiver_email, name, age, selected_doctor, doctor_time, treatmen
     sender_email = os.getenv("EMAIL_USER")
     password = os.getenv("EMAIL_PASS")
 
-    print("Sender:", sender_email)
-    print("Receiver:", receiver_email)
+    st.write("Sender:", sender_email)
+    st.write("Receiver:", receiver_email)
 
     body = f"""
 Hello {name},
@@ -26,11 +27,9 @@ Treatment: {treatment}
     msg['To'] = receiver_email
 
     try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.ehlo()
+        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=20)
 
         server.starttls()
-        server.ehlo()
 
         server.login(sender_email, password)
 
@@ -42,10 +41,9 @@ Treatment: {treatment}
 
         server.quit()
 
-        print("EMAIL SENT SUCCESSFULLY")
+        st.success("MAIL SENT")
         return True
 
     except Exception as e:
-        print(f"EMAIL ERROR:{e}")
-        print(e)
+        st.error(str(e))
         return False
