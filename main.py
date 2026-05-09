@@ -38,14 +38,14 @@ if st.button("Book Appointment"):
     book_appointment(name, age, email, treatment, selected_doctor, selected_time)
 
     try:
-        # send_email(
-        #     email,
-        #     name,
-        #     age,
-        #     selected_doctor,
-        #     selected_time,
-        #     treatment
-        # )
+        send_email(
+            email,
+            name,
+            age,
+            selected_doctor,
+            selected_time,
+            treatment
+        )
         st.success("Appointment Booked & Email Sent ✅")
     except Exception as e:
         st.warning("Appointment booked but detail not sent")
@@ -55,6 +55,19 @@ if st.button("Book Appointment"):
     for key in list(st.session_state.keys()):
         del st.session_state[key]
 
+    success = send_email(
+        email,
+        name,
+        age,
+        selected_doctor,
+        doctor_time,
+        treatment
+    )
+
+    if success:
+        st.success("Appointment booked and email sent!")
+    else:
+        st.error("Email sending failed!")
     st.rerun()
 
     st.write(st.session_state)
