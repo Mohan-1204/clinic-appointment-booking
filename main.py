@@ -33,41 +33,31 @@ time_slots = doctor_time.split(",")
 selected_time = st.selectbox("Available Time", time_slots)
 
 # Button
+
 if st.button("Book Appointment"):
 
-    book_appointment(name, age, email, treatment, selected_doctor, selected_time)
+    # Save appointment
+    book_appointment(
+        name,
+        age,
+        email,
+        treatment,
+        selected_doctor,
+        selected_time
+    )
 
-    try:
-        send_email(
-            email,
-            name,
-            age,
-            selected_doctor,
-            selected_time,
-            treatment
-        )
-        st.success("Appointment Booked & Email Sent ✅")
-    except Exception as e:
-        st.warning("Appointment booked but detail not sent")
-        print(e)
-
-    # ✅ CLEAR ALL VALUES SAFELY
-    for key in list(st.session_state.keys()):
-        del st.session_state[key]
-
+    # Send email
     success = send_email(
         email,
         name,
         age,
         selected_doctor,
-        doctor_time,
+        selected_time,
         treatment
     )
 
+    # Message
     if success:
-        st.success("Appointment booked and email sent!")
+        st.success("Appointment booked and email sent successfully ✅")
     else:
-        st.error("Email sending failed!")
-    st.rerun()
-
-    st.write(st.session_state)
+        st.warning("Appointment booked but email not sent ❌")

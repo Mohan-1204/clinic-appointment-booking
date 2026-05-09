@@ -7,18 +7,17 @@ def send_email(receiver_email, name, age, selected_doctor, doctor_time, treatmen
     sender_email = os.getenv("EMAIL_USER")
     password = os.getenv("EMAIL_PASS")
 
+    print("Sender:", sender_email)
+    print("Receiver:", receiver_email)
+
     body = f"""
 Hello {name},
-
-Your Age: {age}
 
 Your appointment is confirmed.
 
 Doctor: {selected_doctor}
 Time: {doctor_time}
 Treatment: {treatment}
-
-Thank you!
 """
 
     msg = MIMEText(body)
@@ -28,7 +27,10 @@ Thank you!
 
     try:
         server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.ehlo()
+
         server.starttls()
+        server.ehlo()
 
         server.login(sender_email, password)
 
@@ -40,8 +42,9 @@ Thank you!
 
         server.quit()
 
+        print("EMAIL SENT SUCCESSFULLY")
         return True
 
     except Exception as e:
-        print("Email Error:", e)
+        print("EMAIL ERROR:", str(e))
         return False
