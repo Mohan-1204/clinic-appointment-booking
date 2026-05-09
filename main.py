@@ -38,14 +38,14 @@ if st.button("Book Appointment"):
     book_appointment(name, age, email, treatment, selected_doctor, selected_time)
 
     try:
-        send_email(
-            email,
-            name,
-            age,
-            selected_doctor,
-            selected_time,
-            treatment
-        )
+        # send_email(
+        #     email,
+        #     name,
+        #     age,
+        #     selected_doctor,
+        #     selected_time,
+        #     treatment
+        # )
         st.success("Appointment Booked & Email Sent ✅")
     except Exception as e:
         st.warning("Appointment booked but detail not sent")
