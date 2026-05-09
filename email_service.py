@@ -1,17 +1,18 @@
+import os
 import smtplib
 from email.mime.text import MIMEText
 
 def send_email(receiver_email, name, age, selected_doctor, doctor_time, treatment):
 
-    sender_email = "mohanyt54353@gmail.com"
-    password = "glrtxmpvflmmxtvv"  # ⚠️ replace
+    sender_email = os.getenv("EMAIL_USER")
+    password = os.getenv("EMAIL_PASS")
 
     body = f"""
 Hello {name},
 
-# Your Age: {age}
+Your Age: {age}
 
-Your appointment is confirmed with.
+Your appointment is confirmed.
 
 Doctor: {selected_doctor}
 Time: {doctor_time}
@@ -25,8 +26,22 @@ Thank you!
     msg['From'] = sender_email
     msg['To'] = receiver_email
 
-    server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.starttls()
-    server.login(sender_email, password)
-    server.sendmail(sender_email, receiver_email, msg.as_string())
-    server.quit()
+    try:
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+
+        server.login(sender_email, password)
+
+        server.sendmail(
+            sender_email,
+            receiver_email,
+            msg.as_string()
+        )
+
+        server.quit()
+
+        return True
+
+    except Exception as e:
+        print("Email Error:", e)
+        return False
